@@ -1,4 +1,5 @@
 from data import DataBuffer, data_producer, example_data_generator
+import action.simple as auto
 import threading
 import time
 
@@ -13,7 +14,6 @@ producer_thread.daemon = True  # 设置为守护线程，主程序退出时自�
 producer_thread.start()
 
 
-# 示例：每 5 秒打印一次数组的内容
 def monitor_buffer(buffer, interval=1):
     while True:
         print("Current buffer:", buffer.data)
