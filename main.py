@@ -1,11 +1,13 @@
 from data import DataBuffer, data_producer, example_data_generator
-import action.simple as auto
+import action.simple as ac
+import data_convert.calc as ca
 import threading
 import time
 
 # 创建 DataBuffer 实例
-buffer_length = 50  # 假设数组长度为 1000
+buffer_length = 80  # 假设数组长度为 1000
 data_buffer = DataBuffer(buffer_length)
+win = ca.CalcWindow(10, 20)
 # 启动数据生产者线程
 producer_thread = threading.Thread(
     target=data_producer, args=(data_buffer, example_data_generator)
@@ -15,8 +17,19 @@ producer_thread.start()
 
 
 def monitor_buffer(buffer, interval=1):
-    while True:
+    a = 0
+    while True and a < 10:
+        a += 1
         print("Current buffer:", buffer.data)
+        data_contains = buffer.get_data()
+        access = win.add(data_contains)
+        if access:
+            print("accessed: ", win.window)
+            print("     win: ", win.coming)
+            ac.calcregion(win.coming)
+            # ac.screenshot()
+        else:
+            print("window: ", win.window)
         time.sleep(interval)
 
 

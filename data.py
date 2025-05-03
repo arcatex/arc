@@ -6,36 +6,24 @@ from collections import deque
 class DataBuffer:
     def __init__(self, max_size):
         self.size = max_size
-        self.data = [0] * max_size
-        self.head = 0  # 添加数据的指针
-        self.tail = 0  # 移除数据的指针
-        self.count = 0  # 缓存队列中的元素数量
+        self.data = deque(maxlen=max_size)
         self.rlock = threading.RLock()
-        self.start_index = 0  # 当前窗口的起始索引
-        self.cal_index = 0  # 取数起始索引
 
     def add_data(self, data):
         with self.rlock:
-            if self.head == self.size - 1:
-                self.head = 0
-            else:
-                self.head += 1
-            self.data[self.head] = data
-            if self.count < self.size:
-                self.count += 1
+            if len(self.data) >= self.size:
+                # 缓存队列已满，清空缓存队列
+                self.data.clear()
+            self.data.append(data)
 
     def get_data(self):
         with self.rlock:
-            self.data[self.cal_index] = 0
-            if self.cal_index == self.size - 1:
-                self.cal_index = 0
-            else:
-                self.cal_index += 1
-
-            return self.data[self.cal_index]
+            if len(self.data) == 0:
+                return -1
+            return self.data.popleft()
 
 
-def data_producer(buffer, data_generator, interval=1 / 10):
+def data_producer(buffer, data_generator, interval=4 / 10):
     while True:
         data = data_generator()  # 生成数据
         buffer.add_data(data)  # 添加数据到数组
