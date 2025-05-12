@@ -8,7 +8,9 @@ def example_data_generator():
     return random.randint(1, 100)  # 生成一个1到100之间的随机数
 
 
+dq = deque(maxlen=5)
 a = 0
-for i in range(10):
-    a += 1
-    print(a)
+print(1 / 50)
+# for i in range(10):
+#     dq.append(i)
+#     print(dq)

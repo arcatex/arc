@@ -10,11 +10,7 @@ class DataBuffer:
         self.rlock = threading.RLock()
 
     def add_data(self, data):
-        with self.rlock:
-            if len(self.data) >= self.size:
-                # 缓存队列已满，清空缓存队列
-                self.data.clear()
-            self.data.append(data)
+        self.data.append(data)
 
     def get_data(self):
         with self.rlock:

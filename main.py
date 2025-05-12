@@ -22,6 +22,8 @@ def monitor_buffer(buffer, interval=1):
         a += 1
         print("Current buffer:", buffer.data)
         data_contains = buffer.get_data()
+        if data_contains == -1:
+            continue
         access = win.add(data_contains)
         if access:
             print("accessed: ", win.window)
